@@ -5,7 +5,7 @@
 -- 0. Enable UUID extension (if not already)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 2. Create projects table
+-- 1. Create projects table
 CREATE TABLE public.projects (
   id            uuid           PRIMARY KEY DEFAULT uuid_generate_v4(),
   owner_id      uuid           NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -15,7 +15,7 @@ CREATE TABLE public.projects (
   created_at    timestamptz    NOT NULL DEFAULT now()
 );
 
--- 3. Create project_members table (links users to projects)
+-- 2. Create project_members table (links users to projects)
 CREATE TABLE public.project_members (
   project_id  uuid        NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
   user_id     uuid        NOT NULL REFERENCES auth.users(id)     ON DELETE CASCADE,
@@ -23,7 +23,7 @@ CREATE TABLE public.project_members (
   PRIMARY KEY (project_id, user_id)
 );
 
--- 4. Create invites table (optional multiple invite tokens)
+-- 3. Create invites table (optional multiple invite tokens)
 CREATE TABLE public.invites (
   project_id  uuid        NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
   token       text        NOT NULL UNIQUE,
